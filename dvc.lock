@@ -1,0 +1,77 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python src/data_ingestion.py
+    deps:
+    - path: Teen_Mental_Health_Dataset.csv
+      hash: md5
+      md5: 1e302778a1f33075057e980e0f90e577
+      size: 62496
+    - path: src/data_ingestion.py
+      hash: md5
+      md5: 9c4c73aced1509013c1b8f477068b5c5
+      size: 1179
+    params:
+      params.yaml:
+        data_ingestion.test_size: 0.2
+    outs:
+    - path: data/raw
+      hash: md5
+      md5: 881d31c0e8af5aa6f3e7752a14e8420f.dir
+      size: 187488
+      nfiles: 3
+  feature_engineering:
+    cmd: python src/feature_engineering.py
+    deps:
+    - path: data/raw/model.csv
+      hash: md5
+      md5: 1e302778a1f33075057e980e0f90e577
+      size: 62496
+    - path: src/feature_engineering.py
+      hash: md5
+      md5: 33f5ead1e06e05473f54d026ac4ffd0d
+      size: 1903
+    params:
+      params.yaml:
+        feature_engineering.encoder: OneHotEncoder
+    outs:
+    - path: data/feature_engg
+      hash: md5
+      md5: d181d45f293f02d95cdb66dc505d4933.dir
+      size: 79796
+      nfiles: 2
+  model_building:
+    cmd: python src/model_building.py
+    deps:
+    - path: data/feature_engg/X.csv
+      hash: md5
+      md5: 60ffa57a4190958445a5d966d4c32925
+      size: 76178
+    - path: data/feature_engg/y.csv
+      hash: md5
+      md5: 37e25f4e55a1b2e6de98c91cd479680e
+      size: 3618
+    - path: src/model_building.py
+      hash: md5
+      md5: 2996f46b2b2634fa47f7cc1cd2da7b40
+      size: 1465
+    params:
+      params.yaml:
+        model_building.param_grid:
+          max_depth:
+          - 4
+          - 6
+          - 8
+          learning_rate:
+          - 0.01
+          - 0.05
+          - 0.1
+          n_estimators:
+          - 100
+          - 200
+    outs:
+    - path: data/model
+      hash: md5
+      md5: 964c7aebfda8ee6e3ebb9558f9b2392c.dir
+      size: 197522
+      nfiles: 1

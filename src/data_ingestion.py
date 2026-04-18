@@ -30,8 +30,9 @@ def main():
     test_size=load_params(r'C:\Users\milan\Desktop\stress_project\params.yaml')
     df=load_data(r'C:\Users\milan\Desktop\stress_project\Teen_Mental_Health_Dataset.csv')
     train,test=train_test_split(df,test_size=test_size,random_state=42)
-    df.to_csv(os.path.join("data","raw",'test.csv'))
-    df.to_csv(os.path.join("data","raw",'train.csv'))
-    df.to_csv(os.path.join("data","raw",'model.csv'))
+    os.makedirs(os.path.join("data", "raw"), exist_ok=True)
+    df.to_csv(os.path.join("data","raw",'test.csv'),index=False)
+    df.to_csv(os.path.join("data","raw",'train.csv'),index=False)
+    df.to_csv(os.path.join("data","raw",'model.csv'),index=False)
 
 main()    
