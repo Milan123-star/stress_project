@@ -7,6 +7,24 @@ from app_logging import *
 import os
 import yaml
 import pickle
+import dagshub
+import mlflow
+import mlflow.sklearn
+
+dagshub_token = os.getenv("DAGSHUB_PAT")
+if not dagshub_token:
+    raise EnvironmentError("DAGSHUB_PAT environment variable is not set")
+
+os.environ["MLFLOW_TRACKING_USERNAME"] = dagshub_token
+os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
+
+dagshub_url = "https://dagshub.com"
+repo_owner = "Milan123-star"
+repo_name = "stress_project"
+
+# Set up MLflow tracking URI
+mlflow.set_tracking_uri(f'{dagshub_url}/{repo_owner}/{repo_name}.mlflow')
+                        
 X=pd.read_csv(os.path.join("data","feature_engg","X.csv"))
 y=pd.read_csv(os.path.join("data","feature_engg","y.csv")).values.ravel()
 
@@ -38,6 +56,12 @@ def main():
     best_params,best_estimator,best_score=model_building(param_grid)
     save_model(best_estimator)
     print(best_params,best_estimator,best_score)
+    mlflow.set_experiment("dvc-pipeline")
+    with mlflow.start_run() as run:
+        mlflow.log_metric("accuracy_score",best_score)
+        mlflow.sklearn.log_model(sk_model=best_estimator,artifact_path="model")
+        mlflow.log_param("best",best_params)
+
 
         
 main()
