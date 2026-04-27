@@ -28,8 +28,8 @@ def load_data(file_path):
 
 
 def main():
-    test_size=load_params(r'C:\Users\milan\Desktop\stress_project\params.yaml')
-    df=load_data(r'C:\Users\milan\Desktop\stress_project\Teen_Mental_Health_Dataset.csv')
+    test_size=load_params(os.path.join('param.yaml'))
+    df=load_data(os.path.join('Teen_Mental_Health_Dataset.csv'))
     train,test=train_test_split(df,test_size=test_size,random_state=42)
     os.makedirs(os.path.join("data", "raw"), exist_ok=True)
     df.to_csv(os.path.join("data","raw",'test.csv'),index=False)
