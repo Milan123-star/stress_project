@@ -53,19 +53,19 @@ stages:
       size: 3618
     - path: src/model_building.py
       hash: md5
-      md5: 323da5e395a78eac47fe36edc676fe6f
-      size: 2272
+      md5: a6338376c64ef95c2c031800a9361049
+      size: 2796
     params:
       params.yaml:
         model_building.param_grid:
           max_depth:
           - 4
           - 6
-          - 8
+          - 10
           learning_rate:
           - 0.01
           - 0.05
-          - 0.1
+          - 0.01
           n_estimators:
           - 100
           - 200
@@ -75,3 +75,14 @@ stages:
       md5: 964c7aebfda8ee6e3ebb9558f9b2392c.dir
       size: 197522
       nfiles: 1
+  register_model:
+    cmd: python src/register_model.py
+    deps:
+    - path: reports/experiment.json
+      hash: md5
+      md5: a066dd6af1101de110a98973c09e24a2
+      size: 118
+    - path: src/register_model.py
+      hash: md5
+      md5: 835ffa61425e6916c30c47b56597dc67
+      size: 1470

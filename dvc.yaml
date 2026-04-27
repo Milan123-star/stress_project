@@ -27,3 +27,8 @@ stages:
     - model_building.param_grid
     outs:
     - data/model
+  register_model:
+    cmd: python src/register_model.py
+    deps:
+    - reports/experiment.json
+    - src/register_model.py

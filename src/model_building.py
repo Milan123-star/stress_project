@@ -10,6 +10,7 @@ import pickle
 import dagshub
 import mlflow
 import mlflow.sklearn
+import json
 
 dagshub_token = os.getenv("DAGSHUB_PAT")
 if not dagshub_token:
@@ -49,18 +50,38 @@ def save_model(best_estimator):
     os.makedirs(os.path.join('data', 'model'), exist_ok=True)      
     with open(os.path.join('data','model','model.pkl'),'wb') as f:
         pickle.dump(best_estimator,f)
-    return None
 
+def save_model_info(run_id,model_path,file_path):
+    model_info={'run_id':run_id,'model_uri':model_path}
+    with open(file_path,'w') as file:
+        json.dump(model_info,file,indent=4)
+
+
+    
 def main():
     param_grid=load_params(r'C:\Users\milan\Desktop\stress_project\params.yaml')
     best_params,best_estimator,best_score=model_building(param_grid)
     save_model(best_estimator)
     print(best_params,best_estimator,best_score)
-    mlflow.set_experiment("dvc-pipeline")
+    mlflow.set_experiment("dvc-pipeline_new")
     with mlflow.start_run() as run:
-        mlflow.log_metric("accuracy_score",best_score)
-        mlflow.sklearn.log_model(sk_model=best_estimator,artifact_path="model")
-        mlflow.log_param("best",best_params)
+        mlflow.log_metric("accuracy_score", best_score)
+        mlflow.log_params(best_params)
+
+        model_info = mlflow.sklearn.log_model(
+            sk_model=best_estimator,
+            name="model"
+        )
+
+        # IMPORTANT: save model URI, not just "model"
+        save_model_info(
+            run.info.run_id,
+            model_info.model_uri,   # ✅ use this instead
+            'reports/experiment.json'
+        )
+
+        mlflow.log_artifact('reports/experiment.json')
+
 
 
         
