@@ -28,7 +28,7 @@ def load_data(file_path):
 
 
 def main():
-    test_size=load_params(os.path.join('param.yaml'))
+    test_size=load_params(os.path.join('params.yaml'))
     df=load_data(os.path.join('Teen_Mental_Health_Dataset.csv'))
     train,test=train_test_split(df,test_size=test_size,random_state=42)
     os.makedirs(os.path.join("data", "raw"), exist_ok=True)

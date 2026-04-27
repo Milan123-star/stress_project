@@ -45,7 +45,7 @@ def encoding(X,encoder):
     return X_trans
 
 def main():
-    encoder_name=load_params(r'C:\Users\milan\Desktop\stress_project\params.yaml')
+    encoder_name=load_params(os.path.join('params.yaml'))
     encoder=get_encoder(encoder_name)
     X_trans = encoding(X, encoder)
     os.makedirs(os.path.join("data", "feature_engg"), exist_ok=True)
