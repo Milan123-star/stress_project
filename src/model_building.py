@@ -59,7 +59,7 @@ def save_model_info(run_id,model_path,file_path):
 
     
 def main():
-    param_grid=load_params(r'C:\Users\milan\Desktop\stress_project\params.yaml')
+    param_grid=load_params(os.path.join('params.yaml'))
     best_params,best_estimator,best_score=model_building(param_grid)
     save_model(best_estimator)
     print(best_params,best_estimator,best_score)
