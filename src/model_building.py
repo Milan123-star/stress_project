@@ -68,10 +68,7 @@ def main():
         mlflow.log_metric("accuracy_score", best_score)
         mlflow.log_params(best_params)
 
-        model_info = mlflow.sklearn.log_model(
-            sk_model=best_estimator,
-            name="model"
-        )
+        mlflow.sklearn.log_model(model, artifact_path="model")
 
         # IMPORTANT: save model URI, not just "model"
         save_model_info(
