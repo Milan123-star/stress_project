@@ -73,7 +73,7 @@ def main():
         # IMPORTANT: save model URI, not just "model"
         save_model_info(
             run.info.run_id,
-            model_info.model_uri,   # ✅ use this instead
+            model_uri, 
             'reports/experiment.json'
         )
 
