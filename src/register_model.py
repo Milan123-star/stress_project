@@ -40,7 +40,7 @@ def register_model(model_name,model_info):
         stage="Staging"
     )    
 def main():
-    file_path=r'C:\Users\milan\Desktop\stress_project\reports\experiment.json'
+    file_path=os.path.join('reports','experiment.json')
     model_info=load_model_info(file_path)
     model_name="model"
     register_model(model_name,model_info)
