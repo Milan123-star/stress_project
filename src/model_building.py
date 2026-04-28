@@ -57,6 +57,7 @@ def save_model_info(run_id,model_path,file_path):
         json.dump(model_info,file,indent=4)
 
 
+
     
 def main():
     param_grid=load_params(os.path.join('params.yaml'))
@@ -64,21 +65,26 @@ def main():
     save_model(best_estimator)
     print(best_params,best_estimator,best_score)
     mlflow.set_experiment("dvc-pipeline_new")
+
     with mlflow.start_run() as run:
         mlflow.log_metric("accuracy_score", best_score)
         mlflow.log_params(best_params)
 
         mlflow.sklearn.log_model(best_estimator, artifact_path="model")
 
-        # IMPORTANT: save model URI, not just "model"
+        # ✅ define model_uri
+        model_uri = f"runs:/{run.info.run_id}/model"
+
+        # ✅ ensure folder exists
+        os.makedirs("reports", exist_ok=True)
+
         save_model_info(
             run.info.run_id,
-            model_uri, 
-            'reports/experiment.json'
+            model_uri,
+            os.path.join('reports','experiment.json')
         )
 
         mlflow.log_artifact('reports/experiment.json')
-
 
 
         
