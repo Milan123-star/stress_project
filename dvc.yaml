@@ -32,3 +32,7 @@ stages:
     deps:
     - reports/experiment.json
     - src/register_model.py
+  promote_model:
+    cmd: python src/promote_model.py
+    deps:
+    - src/promote_model.py
