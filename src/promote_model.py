@@ -24,13 +24,13 @@ def promote_model():
 
     for version in prod_ver:
         client.transition_model_version_stage(
-            name=model_name
-            version=version
+            name=model_name,
+            version=version,
             stage='Archived'
         )
     client.transition_model_version_stage(
-        name=model_name
-        version=latest_ver_sta
+        name=model_name,
+        version=latest_ver_sta,
         stage='Production'
     )
 
